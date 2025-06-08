@@ -7,7 +7,7 @@ int main(){
 
     int opcao;
     Mat *ma=NULL;
-    int linha,coluna,valor;
+    int linha,coluna,valor,quantidade;
 
     do{
         menu();
@@ -50,7 +50,7 @@ int main(){
                 system("cls");
                 break;
             case 3:
-                if(ma!=NULL||ma->inicio!=NULL){
+                if(ma!=NULL && ma->inicio!=NULL){
                     printf("Digite a linha e a coluna para consultar um valor:  ");
                     scanf("%d %d",&linha,&coluna);
                     printf("*************************\n");
@@ -64,17 +64,22 @@ int main(){
                 break;
             case 4:
                 if (ma != NULL && ma->inicio != NULL) {
+                int posicao[10][2];    
                 printf("Digite um valor para encontrar a posicao: ");
                 scanf("%d", &valor);
-                if (consulta_posicao_valor(ma, valor, &linha, &coluna)) {
+                if (consulta_posicao_valor(ma, valor,&quantidade,posicao)) {
                 printf("*************************\n");    
-                printf("Posicao (%d, %d)\n", linha, coluna);
+                printf("Valor: %d, quantidade: %d\n", valor,quantidade);
+                printf("*************************\n");
+                for (int i = 0; i < quantidade; i++) {
+                printf("Posicao (%d, %d)\n", posicao[i][0], posicao[i][1]);
+                }
                 printf("*************************\n");
                 } else {
-                printf("Valor nao encontrado na matriz.\n");
+                printf("Valor não encontrado na matriz.\n");
                 }
                 } else {
-                printf("Erro: Matriz nao foi criada\n");
+                 printf("Erro: Matriz não foi criada\n");
                 }
                 system("pause");
                 system("cls");

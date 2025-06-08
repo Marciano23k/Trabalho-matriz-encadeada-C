@@ -20,18 +20,17 @@ void menu(){
 Mat* cria_matriz(int linha, int coluna) {
     Mat *nova_matriz = (Mat*)malloc(sizeof(Mat));
     if (nova_matriz == NULL) {
-       // printf("Erro: malloc falhou ao criar matriz\n");
         return NULL;
     }
     nova_matriz->linha = linha;
     nova_matriz->coluna = coluna;
     nova_matriz->inicio = NULL;
     Elem **matriz = (Elem**)malloc(linha * sizeof(Elem*));
-    nova_matriz->matriz = matriz; 
     if (matriz == NULL) {
         free(nova_matriz);
         return NULL;
     }
+    nova_matriz->matriz = matriz; 
     // Alocando cada linha e verificando se foi bem-sucedido
     for (int i = 0; i < linha; i++) {
         matriz[i] = (Elem*)malloc(coluna * sizeof(Elem));
@@ -39,12 +38,6 @@ Mat* cria_matriz(int linha, int coluna) {
             for (int j = 0; j < i; j++) free(matriz[j]);
             free(matriz);
             free(nova_matriz);
-            return NULL;
-        }
-    }
-    // Verificando se todas as linhas foram alocadas corretamente antes de conectar
-    for (int i = 0; i < linha; i++) {
-        if (matriz[i] == NULL) {
             return NULL;
         }
     }
@@ -109,14 +102,14 @@ int consulta_valor_posicao(Mat* ma,int linha, int coluna){
      for (int i = 0; i < linha; i++) {
         if (atual->baixo == NULL) {
             printf("Posicao invalida\n");
-            return 1;
+            return 0;
         }
         atual = atual->baixo;
     }
     for (int j = 0; j < coluna; j++) {
         if (atual->proximo == NULL) {
             printf("Posicao invalida\n");
-            return 1;
+            return 0;
         }
         atual = atual->proximo;
     }
@@ -124,26 +117,27 @@ int consulta_valor_posicao(Mat* ma,int linha, int coluna){
     return atual->valor;
 }
 //[4]Consulta uma posição pelo valor dado
-int consulta_posicao_valor(Mat* ma, int valor, int *linha, int *coluna) {
+int consulta_posicao_valor(Mat* ma, int valor, int *quantidade, int posicao[][2]) {
     if (ma == NULL || ma->inicio == NULL) {
         printf("Matriz não criada\n");
         return 0;
     }
+    *quantidade=0;
     // Buscar valor na matriz
     Elem *linha_aux = ma->inicio;
     for (int i = 0; i < ma->linha; i++) {
         Elem *coluna_aux=linha_aux;
         for (int j = 0; j < ma->coluna; j++) {
             if (coluna_aux->valor == valor) {
-                *linha = i;
-                *coluna = j;
-                return 1;
+                posicao[*quantidade][0] = i; // Armazena linha
+                posicao[*quantidade][1] = j; // Armazena coluna
+                (*quantidade)++; // Incrementa quantidade de ocorrências
             }
             coluna_aux = coluna_aux->proximo;
         }
             linha_aux = linha_aux->baixo;
     }
-    return 0;
+    return (*quantidade>0);
 }
 //[5]Imprime os 4 vizinhos de um elemento 
 void imprime_4_vizinhos(Mat* ma, int linha, int coluna) {
@@ -201,7 +195,7 @@ void imprime_matriz(Mat* ma){
                if(aux->valor==0){
                 printf("[  M  ]");
                }else{
-            printf("[ %d ]", aux->valor);
+            printf("[ %2d ]", aux->valor);
             }
             aux = aux->proximo;
         }
@@ -228,7 +222,7 @@ int remove_valor(Mat *ma,int valor){
 }
 //Libera a matriz
 void libera_matriz(Mat* ma){
-    if (ma != NULL) {
+ if (ma != NULL) {
         if (ma->matriz != NULL) {
             for (int i = 0; i < ma->linha; i++) {
                 free(ma->matriz[i]); // libera cada linha
@@ -239,4 +233,4 @@ void libera_matriz(Mat* ma){
     } else {
         printf("Matriz nao criada\n");
     }
-}
+}    
