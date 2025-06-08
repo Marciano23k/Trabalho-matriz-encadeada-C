@@ -1,0 +1,13 @@
+# Ignorar arquivos executáveis do Windows
+*.exe
+
+# Ignorar arquivos de build e temporários comuns em projetos C
+*.o
+*.obj
+*.out
+*.log
+*.tmp
+
+# Ignorar pastas de saída, se existirem
+/output/
+/build/
