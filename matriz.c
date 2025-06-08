@@ -220,7 +220,7 @@ int remove_valor(Mat *ma,int valor){
     }
     return 0;
 }
-//Libera a matriz
+//[8]Libera a matriz
 void libera_matriz(Mat* ma){
  if (ma != NULL) {
         if (ma->matriz != NULL) {
